@@ -198,6 +198,7 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   InnerRouterDelegate _routerDelegate;
   ChildBackButtonDispatcher _backButtonDispatcher;
+  bool _isSearching = false;
 
   void initState() {
     super.initState();
@@ -228,7 +229,18 @@ class _AppShellState extends State<AppShell> {
     _backButtonDispatcher.takePriority();
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: _isSearching ? TextField(autofocus: true) : null,
+        actions: [
+          IconButton(
+              icon: Icon(_isSearching ? Icons.clear : Icons.search),
+              onPressed: () {
+                setState(() {
+                  _isSearching = !_isSearching;
+                });
+              })
+        ],
+      ),
       body: Router(
         routerDelegate: _routerDelegate,
         backButtonDispatcher: _backButtonDispatcher,
