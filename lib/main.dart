@@ -229,18 +229,6 @@ class _AppShellState extends State<AppShell> {
     _backButtonDispatcher.takePriority();
 
     return Scaffold(
-      appBar: AppBar(
-        title: _isSearching ? TextField(autofocus: true) : null,
-        actions: [
-          IconButton(
-              icon: Icon(_isSearching ? Icons.clear : Icons.search),
-              onPressed: () {
-                setState(() {
-                  _isSearching = !_isSearching;
-                });
-              })
-        ],
-      ),
       body: Router(
         routerDelegate: _routerDelegate,
         backButtonDispatcher: _backButtonDispatcher,
@@ -340,18 +328,44 @@ class FadeAnimationPage extends Page {
 }
 
 // Screens
-class BooksListScreen extends StatelessWidget {
+class BooksListScreen extends StatefulWidget {
   final List<Book> books;
   final ValueChanged<Book> onTapped;
 
   BooksListScreen({
     @required this.books,
-    @required this.onTapped,
+    this.onTapped,
   });
 
   @override
+  State<BooksListScreen> createState() => BookListState();
+}
+
+
+class BookListState extends State<BooksListScreen> {
+  bool _isSearching = false;
+
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final books = widget.books;
+    final onTapped = widget.onTapped;
     return Scaffold(
+      appBar: AppBar(
+        title: _isSearching ? TextField(autofocus: true) : null,
+        actions: [
+          IconButton(
+              icon: Icon(_isSearching ? Icons.clear : Icons.search),
+              onPressed: () {
+                setState(() {
+                  _isSearching = !_isSearching;
+                });
+              })
+        ],
+      ),
       body: ListView(
         children: [
           for (var book in books)
